@@ -1,323 +1,281 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TDY_CARREIRA — Career Simulator</title>
-    
-    <!-- PWA Config -->
-    <meta name="theme-color" content="#020617">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <!-- Tailwind CSS & FontAwesome -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>The Fenômeno — Simulador de Carreira no Futebol</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Teko:wght@600;700&family=Inter:wght@400;600;800&display=swap');
-        .font-teko { font-family: 'Teko', sans-serif; }
-        .font-sans { font-family: 'Inter', sans-serif; }
-        .glow-emerald { box-shadow: 0 0 20px rgba(16, 185, 129, 0.25); }
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #22c55e;
+            --accent-hover: #16a34a;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            margin: 10px 0 0 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .section {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-top: 0;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--accent-color);
+        }
+
+        .flowchart {
+            background-color: #0f172a;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+            color: #38bdf8;
+            border: 1px solid var(--border-color);
+        }
+
+        .profile-card {
+            background-color: #0f172a;
+            border: 2px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .profile-header {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            color: #facc15;
+        }
+
+        .profile-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .stat-group {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .stat-title {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .formula {
+            background-color: #0f172a;
+            padding: 12px;
+            border-left: 4px solid var(--accent-color);
+            font-style: italic;
+            margin: 10px 0;
+        }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen pb-12 selection:bg-emerald-500 selection:text-slate-950">
+<body>
 
-    <!-- Header -->
-    <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="bg-emerald-500 text-slate-950 p-2 rounded-lg font-black text-xl flex items-center justify-center w-10 h-10 glow-emerald">
-                    <i class="fa-solid fa-futbol"></i>
-                </div>
-                <div>
-                    <h1 class="text-2xl font-teko uppercase tracking-wider text-white leading-none">TDY<span class="text-emerald-400">_CARREIRA</span></h1>
-                    <p class="text-xs text-slate-400 font-semibold tracking-widest uppercase">The Fenômeno Mode</p>
-                </div>
-            </div>
-            <button onclick="resetPlayer()" class="text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-lg flex items-center gap-1">
-                <i class="fa-solid fa-rotate-left text-emerald-400"></i> Novo Jogador
-            </button>
-        </div>
+<div class="container">
+    <header>
+        <h1>⚽ The Fenômeno</h1>
+        <p>Documentação da Arquitetura e Mecânicas do Simulador de Carreira</p>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 pt-6 space-y-6">
+    <!-- Módulos -->
+    <div class="section">
+        <h2>1. Módulos & Arquitetura do Sistema</h2>
+        <p>O simulador é alimentado por três tabelas principais de dados:</p>
+        <ul>
+            <li><strong><code>players.csv</code>:</strong> Controla o perfil do jogador, posição, <em>overall</em> (OVR), potencial, idade, atributos físicos/técnicos, valor de mercado e histórico de transferências.</li>
+            <li><strong><code>clubs.csv</code>:</strong> Armazena clubes por divisão, orçamento, reputação, infraestrutura da base/treinamento e liga pertencente.</li>
+            <li><strong><code>competitions.csv</code>:</strong> Define ligas nacionais, copas e torneios continentais (ex: Liga dos Campeões, Libertadores, Copa do Mundo).</li>
+        </ul>
+    </div>
 
-        <!-- FORMULÁRIO DE CRIAÇÃO DO JOGADOR -->
-        <section id="creationForm" class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-2xl mx-auto shadow-xl">
-            <h2 class="text-2xl font-teko font-bold uppercase text-emerald-400 mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-user-plus"></i> Criar o Teu Jogador
-            </h2>
-            
-            <form onsubmit="savePlayer(event)" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Nome</label>
-                        <input type="text" id="inputFirstName" required placeholder="Ex: Lucas" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-emerald-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Sobrenome</label>
-                        <input type="text" id="inputLastName" required placeholder="Ex: Silva" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-emerald-500 focus:outline-none">
-                    </div>
-                </div>
+    <!-- Atributos -->
+    <div class="section">
+        <h2>2. Atributos do Jogador</h2>
+        <p>Cada atleta possui atributos em uma escala de <strong>1 a 99</strong>, agrupados nas seguintes categorias:</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Categoria</th>
+                    <th>Atributos Envolvidos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Físico</strong></td>
+                    <td>Aceleração, Pique (Sprint), Resistência, Força, Agilidade</td>
+                </tr>
+                <tr>
+                    <td><strong>Técnico</strong></td>
+                    <td>Finalização, Passe Curto, Passe Longo, Drible, Controle de Bola, Cabeceio</td>
+                </tr>
+                <tr>
+                    <td><strong>Tático / Mental</strong></td>
+                    <td>Visão de Jogo, Posicionamento, Frieza, Comportamento em Grandes Jogos</td>
+                </tr>
+                <tr>
+                    <td><strong>Defesa</strong> <em>(Se aplicável)</em></td>
+                    <td>Carrinho, Desarme, Interceptação, Noção Defensiva</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Idade</label>
-                        <input type="number" id="inputAge" min="16" max="40" value="17" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-emerald-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Nº Camisola</label>
-                        <input type="number" id="inputNumber" min="1" max="99" value="10" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-emerald-500 focus:outline-none">
-                    </div>
-                    <div class="col-span-2 md:col-span-2">
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Nacionalidade</label>
-                        <input type="text" id="inputNationality" required placeholder="Ex: Portugal / Brasil" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-emerald-500 focus:outline-none">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Posição</label>
-                    <select id="inputPosition" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white focus:border-emerald-500 focus:outline-none">
-                        <option value="Avançado Centro (ST)">Avançado Centro (ST)</option>
-                        <option value="Extremo (LW/RW)">Extremo (LW/RW)</option>
-                        <option value="Médio Ofensivo (CAM)">Médio Ofensivo (CAM)</option>
-                        <option value="Médio Centro (CM)">Médio Centro (CM)</option>
-                        <option value="Defesa Central (CB)">Defesa Central (CB)</option>
-                        <option value="Guarda-Redes (GK)">Guarda-Redes (GK)</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3.5 rounded-xl transition font-teko text-xl uppercase tracking-wider glow-emerald">
-                    Iniciar Carreira <i class="fa-solid fa-arrow-right ml-1"></i>
-                </button>
-            </form>
-        </section>
-
-        <!-- DASHBOARD DO JOGADOR (OCULTA ATÉ CRIAR JOGADOR) -->
-        <div id="playerDashboard" class="hidden space-y-6">
-
-            <!-- Card de Jogador -->
-            <section class="bg-gradient-to-r from-slate-900 via-slate-900 to-slate-800 border border-slate-800 rounded-2xl p-6 relative overflow-hidden">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-                    <div class="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
-                        <div class="relative">
-                            <div class="w-24 h-24 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-4xl font-black text-slate-950 glow-emerald" id="displayOvr">
-                                75
-                            </div>
-                            <span class="absolute -bottom-2 -right-2 bg-slate-950 border border-emerald-500 text-emerald-400 text-xs font-bold px-2 py-0.5 rounded-full" id="displayNumber">
-                                #10
-                            </span>
-                        </div>
-                        <div>
-                            <div class="inline-block bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold px-2.5 py-0.5 rounded uppercase tracking-wider mb-1" id="displayPosition">
-                                Avançado
-                            </div>
-                            <h2 class="text-4xl font-teko font-bold uppercase tracking-wide text-white" id="displayName">
-                                Lucas Silva
-                            </h2>
-                            <p class="text-slate-400 text-sm flex items-center justify-center md:justify-start gap-3">
-                                <span><i class="fa-solid fa-flag text-emerald-400"></i> <span id="displayNationality">Portugal</span></span>
-                                <span><i class="fa-solid fa-cake-candles text-emerald-400"></i> <span id="displayAge">17</span> anos</span>
-                                <span><i class="fa-solid fa-shield-halved text-emerald-400"></i> <span id="displayClub">Clube Inicial</span></span>
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Atributos -->
-                    <div class="grid grid-cols-3 gap-3 w-full md:w-auto">
-                        <div class="bg-slate-950/60 border border-slate-800 p-3 rounded-xl text-center min-w-[90px]">
-                            <span class="text-xs text-slate-400 block font-semibold uppercase">Ritmo</span>
-                            <span class="text-2xl font-teko font-bold text-emerald-400" id="statPace">78</span>
-                        </div>
-                        <div class="bg-slate-950/60 border border-slate-800 p-3 rounded-xl text-center min-w-[90px]">
-                            <span class="text-xs text-slate-400 block font-semibold uppercase">Remate</span>
-                            <span class="text-2xl font-teko font-bold text-emerald-400" id="statShooting">74</span>
-                        </div>
-                        <div class="bg-slate-950/60 border border-slate-800 p-3 rounded-xl text-center min-w-[90px]">
-                            <span class="text-xs text-slate-400 block font-semibold uppercase">Passe</span>
-                            <span class="text-2xl font-teko font-bold text-emerald-400" id="statPassing">70</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Escolhas de Carreira & Transferências de Clube -->
-            <section class="bg-slate-900 border border-slate-800 p-6 rounded-2xl">
-                <h3 class="text-xl font-teko font-bold text-white uppercase mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-handshake text-emerald-400"></i> Módulo de Mercado & Decisões de Carreira
-                </h3>
-                <p class="text-xs text-slate-400 mb-4">Escolhe o teu próximo clube ou decisão estratégica de carreira:</p>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <button onclick="changeClub('Sporting CP', 2)" class="bg-slate-950 hover:border-emerald-500 border border-slate-800 p-4 rounded-xl text-left transition group">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="font-bold text-white group-hover:text-emerald-400">Sporting CP</span>
-                            <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded">+2 OVR</span>
-                        </div>
-                        <p class="text-xs text-slate-400">Assinar contrato profissional e lutar pela titularidade.</p>
-                    </button>
-
-                    <button onclick="changeClub('SL Benfica', 3)" class="bg-slate-950 hover:border-emerald-500 border border-slate-800 p-4 rounded-xl text-left transition group">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="font-bold text-white group-hover:text-emerald-400">SL Benfica</span>
-                            <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded">+3 OVR</span>
-                        </div>
-                        <p class="text-xs text-slate-400">Transferência para projeto de alta competição europeia.</p>
-                    </button>
-
-                    <button onclick="changeClub('FC Porto', 3)" class="bg-slate-950 hover:border-emerald-500 border border-slate-800 p-4 rounded-xl text-left transition group">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="font-bold text-white group-hover:text-emerald-400">FC Porto</span>
-                            <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded">+3 OVR</span>
-                        </div>
-                        <p class="text-xs text-slate-400">Apostar na intensidade e raça de campeão.</p>
-                    </button>
-                </div>
-            </section>
-
-            <!-- Ações do Simulador -->
-            <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
-                    <h3 class="text-xl font-teko font-bold text-white uppercase mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-gamepad text-emerald-400"></i> Simular Temporada
-                    </h3>
-                    <button onclick="simulateMatch()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 rounded-xl transition uppercase tracking-wider text-sm glow-emerald mb-4">
-                        <i class="fa-solid fa-play mr-1"></i> Jogar Partida Decisiva
-                    </button>
-                    <div id="matchLog" class="text-xs text-slate-400 bg-slate-950 p-3 rounded-xl h-24 overflow-y-auto font-mono">
-                        Aguardando início de simulação...
-                    </div>
-                </div>
-
-                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
-                    <h3 class="text-xl font-teko font-bold text-white uppercase mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-chart-line text-emerald-400"></i> Histórico do Jogador
-                    </h3>
-                    <div class="relative h-44 w-full">
-                        <canvas id="performanceChart"></canvas>
-                    </div>
-                </div>
-            </section>
-
+    <!-- Fluxo -->
+    <div class="section">
+        <h2>3. Fluxo Principal da Simulação</h2>
+        <div class="flowchart">
+[ Início de Temporada ] 
+       │
+       ▼
+[ Treinamento & Evolução ] ──► [ Pré-Temporada / Amistosos ]
+       │
+       ▼
+[ Rodada de Ligas / Copas ] ──► [ Simulação da Partida ]
+       │                                │
+       │                                ▼
+       │                    [ Desempenho & Estatísticas ]
+       ▼
+[ Janela de Transferências ] ◄── [ Ofertas de Outros Clubes ]
+       │
+       ▼
+[ Fim de Temporada ] ──► [ Avaliação, Prêmios & Aposentadoria ]
         </div>
+    </div>
 
-    </main>
+    <!-- Motor de Jogo -->
+    <div class="section">
+        <h2>4. Motor de Jogo & Mecânicas Principais</h2>
+        
+        <h3>A. Algoritmo de Simulação de Partida</h3>
+        <p>O resultado e a atuação individual são definidos pela relação:</p>
+        <div class="formula">
+            Desempenho = f(OVR do Atleta, Forma Física, Moral, Nível do Adversário)
+        </div>
+        <ul>
+            <li><strong>Notas da Partida (6.0 a 10.0):</strong> Geradas com base em gols, assistências, passes certos, desarmes e erros decisivos.</li>
+            <li><strong>Eventos em Tempo Real:</strong> Lesões, cartões amarelo/vermelho, substituições e momentos de decisão (penaltis, faltas).</li>
+        </ul>
 
-    <script>
-        let playerData = null;
-        let chartInstance = null;
+        <h3>B. Sistema de Evolução & Idade</h3>
+        <ul>
+            <li><strong>Jovem (16–23 anos):</strong> Ganho acelerado de atributos com base nas notas dos jogos e intensidade dos treinos.</li>
+            <li><strong>Auge (24–29 anos):</strong> Estabilização do <em>overall</em>, pequenos ajustes conforme o desempenho.</li>
+            <li><strong>Declínio (30+ anos):</strong> Perda gradual de atributos físicos (velocidade e resistência primeiro), compensada por pequenos ganhos táticos.</li>
+        </ul>
 
-        // Carregar dados guardados
-        window.onload = function() {
-            const saved = localStorage.getItem('tdy_player');
-            if (saved) {
-                playerData = JSON.parse(saved);
-                renderDashboard();
-            }
-        };
+        <h3>C. Transferências & Mercado</h3>
+        <ul>
+            <li><strong>Valor de Mercado:</strong> Calculado dinamicamente usando Idade, OVR, Potencial e Tempo de Contrato restante.</li>
+            <li><strong>Propostas de Transferência:</strong> Recebidas ao fim de cada janela caso o desempenho individual supere a média da liga.</li>
+            <li><strong>Contratos:</strong> Negociação de salário, duração e cláusulas de rescisão.</li>
+        </ul>
+    </div>
 
-        function savePlayer(e) {
-            e.preventDefault();
-            playerData = {
-                firstName: document.getElementById('inputFirstName').value,
-                lastName: document.getElementById('inputLastName').value,
-                age: parseInt(document.getElementById('inputAge').value),
-                number: document.getElementById('inputNumber').value,
-                nationality: document.getElementById('inputNationality').value,
-                position: document.getElementById('inputPosition').value,
-                club: 'Base de Formação',
-                ovr: 75,
-                pace: 78,
-                shooting: 74,
-                passing: 70,
-                history: [75]
-            };
-            localStorage.setItem('tdy_player', JSON.stringify(playerData));
-            renderDashboard();
-        }
-
-        function renderDashboard() {
-            document.getElementById('creationForm').classList.add('hidden');
-            document.getElementById('playerDashboard').classList.remove('hidden');
-
-            document.getElementById('displayName').innerText = `${playerData.firstName} "${playerData.lastName}"`;
-            document.getElementById('displayAge').innerText = playerData.age;
-            document.getElementById('displayNumber').innerText = `#${playerData.number}`;
-            document.getElementById('displayNationality').innerText = playerData.nationality;
-            document.getElementById('displayPosition').innerText = playerData.position;
-            document.getElementById('displayClub').innerText = playerData.club;
+    <!-- Perfil Exemplo -->
+    <div class="section">
+        <h2>5. Exemplo de Exibição de Perfil no Jogo</h2>
+        <div class="profile-card">
+            <div class="profile-header">PERFIL DO JOGADOR</div>
+            <div class="profile-row">
+                <span><strong>Nome:</strong> Lucas "Fenômeno" Silva</span>
+                <span><strong>Idade:</strong> 19 anos</span>
+            </div>
+            <div class="profile-row">
+                <span><strong>Posição:</strong> ATA (Atacante)</span>
+                <span><strong>Clube:</strong> Santos FC</span>
+            </div>
+            <div class="profile-row">
+                <span><strong>Valor de Mercado:</strong> € 14.5M</span>
+                <span><strong>OVR / Potencial:</strong> 76 / 88</span>
+            </div>
             
-            document.getElementById('displayOvr').innerText = playerData.ovr;
-            document.getElementById('statPace').innerText = playerData.pace;
-            document.getElementById('statShooting').innerText = playerData.shooting;
-            document.getElementById('statPassing').innerText = playerData.passing;
+            <div class="stat-group">
+                <div><span class="stat-title">[FÍSICO]</span> Aceleração: 82 | Sprint: 84 | Força: 70</div>
+                <div><span class="stat-title">[TÉCNICA]</span> Finalização: 79 | Drible: 81 | Passe: 68</div>
+                <div><span class="stat-title">[MENTAL]</span> Frieza: 75 | Visão: 71 | Posicionamento: 77</div>
+            </div>
+        </div>
+    </div>
+</div>
 
-            initChart();
-        }
-
-        function changeClub(newClub, ovrBoost) {
-            playerData.club = newClub;
-            playerData.ovr += ovrBoost;
-            playerData.pace += 1;
-            playerData.shooting += 1;
-            playerData.passing += 1;
-            playerData.history.push(playerData.ovr);
-            
-            localStorage.setItem('tdy_player', JSON.stringify(playerData));
-            renderDashboard();
-            
-            const log = document.getElementById('matchLog');
-            log.innerHTML = `> Transferência concluída para o ${newClub}! OVR subiu para ${playerData.ovr}.<br>` + log.innerHTML;
-        }
-
-        function simulateMatch() {
-            const goals = Math.floor(Math.random() * 3);
-            const rating = (6 + Math.random() * 4).toFixed(1);
-            playerData.ovr += rating > 8.0 ? 1 : 0;
-            playerData.history.push(playerData.ovr);
-            
-            localStorage.setItem('tdy_player', JSON.stringify(playerData));
-            renderDashboard();
-
-            const log = document.getElementById('matchLog');
-            log.innerHTML = `> Jogo concluído: Marcaste ${goals} golo(s). Nota: ${rating}. OVR: ${playerData.ovr}<br>` + log.innerHTML;
-        }
-
-        function resetPlayer() {
-            localStorage.removeItem('tdy_player');
-            location.reload();
-        }
-
-        function initChart() {
-            const ctx = document.getElementById('performanceChart').getContext('2d');
-            if (chartInstance) chartInstance.destroy();
-            
-            chartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: playerData.history.map((_, i) => `Fase ${i+1}`),
-                    datasets: [{
-                        label: 'Evolução OVR',
-                        data: playerData.history,
-                        borderColor: '#10b981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                        fill: true,
-                        tension: 0.3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-                        y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } }
-                    }
-                }
-            });
-        }
-    </script>
 </body>
 </html>
