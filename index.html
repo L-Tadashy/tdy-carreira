@@ -1,281 +1,347 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Fenômeno — Simulador de Carreira no Futebol</title>
+    <title>TDY CARREIRAS - Simulador de Carreira</title>
+    <!-- Fonte Inter & Lucide Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent-color: #22c55e;
-            --accent-hover: #16a34a;
-            --text-color: #f8fafc;
-            --text-muted: #94a3b8;
+            --bg-dark: #0F172A;
+            --card-bg: #1E293B;
+            --accent-red: #DC2626;
+            --accent-red-hover: #B91C1C;
+            --text-light: #F8FAFC;
+            --text-muted: #94A3B8;
             --border-color: #334155;
+            --green-badge: #16A34A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            display: flex;
+            min-height: 100vh;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
+        /* Sidebar Nav */
+        aside {
+            width: 260px;
+            background-color: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--accent-red);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: var(--accent-red);
+            color: var(--text-light);
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
         }
 
         header {
-            text-align: center;
-            padding: 40px 20px;
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-            border-radius: 12px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
         }
 
         header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            font-size: 28px;
+            font-weight: 700;
         }
 
-        header p {
-            margin: 10px 0 0 0;
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        .section {
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             background-color: var(--card-bg);
-            border-radius: 8px;
-            padding: 25px;
-            margin-bottom: 25px;
+            padding: 8px 16px;
+            border-radius: 30px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
-        h2 {
-            color: var(--accent-color);
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 8px;
-            margin-top: 0;
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background-color: var(--accent-red);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
         }
 
-        ul {
-            padding-left: 20px;
+        /* Grid Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
         }
 
-        li {
-            margin-bottom: 8px;
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .card-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .card-icon {
+            color: var(--accent-red);
+        }
+
+        /* Section Containers */
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Tables */
+        .table-container {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            margin-bottom: 32px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
+            text-align: left;
         }
 
         th, td {
-            padding: 12px;
-            text-align: left;
+            padding: 16px 24px;
             border-bottom: 1px solid var(--border-color);
         }
 
         th {
-            background-color: rgba(255, 255, 255, 0.05);
-            color: var(--accent-color);
+            background-color: rgba(255, 255, 255, 0.02);
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 600;
         }
 
-        .flowchart {
-            background-color: #0f172a;
-            padding: 15px;
-            border-radius: 6px;
-            font-family: monospace;
-            white-space: pre;
-            overflow-x: auto;
-            color: #38bdf8;
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-green {
+            background-color: rgba(22, 163, 74, 0.2);
+            color: #4ADE80;
+        }
+
+        .badge-red {
+            background-color: rgba(220, 38, 38, 0.2);
+            color: #FCA5A5;
+        }
+
+        /* Code / File Box */
+        .file-box {
+            background-color: #090D16;
             border: 1px solid var(--border-color);
-        }
-
-        .profile-card {
-            background-color: #0f172a;
-            border: 2px solid var(--accent-color);
             border-radius: 8px;
-            padding: 20px;
-            font-family: 'Courier New', Courier, monospace;
-        }
-
-        .profile-header {
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            border-bottom: 1px dashed var(--border-color);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-            color: #facc15;
-        }
-
-        .profile-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            flex-wrap: wrap;
-        }
-
-        .stat-group {
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .stat-title {
-            color: var(--accent-color);
-            font-weight: bold;
-        }
-
-        .formula {
-            background-color: #0f172a;
-            padding: 12px;
-            border-left: 4px solid var(--accent-color);
-            font-style: italic;
-            margin: 10px 0;
+            padding: 16px;
+            font-family: monospace;
+            color: var(--text-muted);
+            margin-top: 12px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>⚽ The Fenômeno</h1>
-        <p>Documentação da Arquitetura e Mecânicas do Simulador de Carreira</p>
-    </header>
-
-    <!-- Módulos -->
-    <div class="section">
-        <h2>1. Módulos & Arquitetura do Sistema</h2>
-        <p>O simulador é alimentado por três tabelas principais de dados:</p>
-        <ul>
-            <li><strong><code>players.csv</code>:</strong> Controla o perfil do jogador, posição, <em>overall</em> (OVR), potencial, idade, atributos físicos/técnicos, valor de mercado e histórico de transferências.</li>
-            <li><strong><code>clubs.csv</code>:</strong> Armazena clubes por divisão, orçamento, reputação, infraestrutura da base/treinamento e liga pertencente.</li>
-            <li><strong><code>competitions.csv</code>:</strong> Define ligas nacionais, copas e torneios continentais (ex: Liga dos Campeões, Libertadores, Copa do Mundo).</li>
-        </ul>
-    </div>
-
-    <!-- Atributos -->
-    <div class="section">
-        <h2>2. Atributos do Jogador</h2>
-        <p>Cada atleta possui atributos em uma escala de <strong>1 a 99</strong>, agrupados nas seguintes categorias:</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Categoria</th>
-                    <th>Atributos Envolvidos</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Físico</strong></td>
-                    <td>Aceleração, Pique (Sprint), Resistência, Força, Agilidade</td>
-                </tr>
-                <tr>
-                    <td><strong>Técnico</strong></td>
-                    <td>Finalização, Passe Curto, Passe Longo, Drible, Controle de Bola, Cabeceio</td>
-                </tr>
-                <tr>
-                    <td><strong>Tático / Mental</strong></td>
-                    <td>Visão de Jogo, Posicionamento, Frieza, Comportamento em Grandes Jogos</td>
-                </tr>
-                <tr>
-                    <td><strong>Defesa</strong> <em>(Se aplicável)</em></td>
-                    <td>Carrinho, Desarme, Interceptação, Noção Defensiva</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Fluxo -->
-    <div class="section">
-        <h2>3. Fluxo Principal da Simulação</h2>
-        <div class="flowchart">
-[ Início de Temporada ] 
-       │
-       ▼
-[ Treinamento & Evolução ] ──► [ Pré-Temporada / Amistosos ]
-       │
-       ▼
-[ Rodada de Ligas / Copas ] ──► [ Simulação da Partida ]
-       │                                │
-       │                                ▼
-       │                    [ Desempenho & Estatísticas ]
-       ▼
-[ Janela de Transferências ] ◄── [ Ofertas de Outros Clubes ]
-       │
-       ▼
-[ Fim de Temporada ] ──► [ Avaliação, Prêmios & Aposentadoria ]
+    <!-- Navegação Lateral -->
+    <aside>
+        <div>
+            <div class="logo">
+                <i data-lucide="trophy"></i>
+                <span>TDY CARREIRAS</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" class="active"><i data-lucide="layout-dashboard"></i> Painel</a></li>
+                <li><a href="#"><i data-lucide="database"></i> Ficheiros CSV</a></li>
+                <li><a href="#"><i data-lucide="users"></i> Plantel</a></li>
+                <li><a href="#"><i data-lucide="arrow-left-right"></i> Mercado</a></li>
+                <li><a href="#"><i data-lucide="settings"></i> Definições</a></li>
+            </ul>
         </div>
-    </div>
-
-    <!-- Motor de Jogo -->
-    <div class="section">
-        <h2>4. Motor de Jogo & Mecânicas Principais</h2>
-        
-        <h3>A. Algoritmo de Simulação de Partida</h3>
-        <p>O resultado e a atuação individual são definidos pela relação:</p>
-        <div class="formula">
-            Desempenho = f(OVR do Atleta, Forma Física, Moral, Nível do Adversário)
+        <div style="font-size: 12px; color: var(--text-muted);">
+            v1.0.0 — Simulador TDY
         </div>
-        <ul>
-            <li><strong>Notas da Partida (6.0 a 10.0):</strong> Geradas com base em gols, assistências, passes certos, desarmes e erros decisivos.</li>
-            <li><strong>Eventos em Tempo Real:</strong> Lesões, cartões amarelo/vermelho, substituições e momentos de decisão (penaltis, faltas).</li>
-        </ul>
+    </aside>
 
-        <h3>B. Sistema de Evolução & Idade</h3>
-        <ul>
-            <li><strong>Jovem (16–23 anos):</strong> Ganho acelerado de atributos com base nas notas dos jogos e intensidade dos treinos.</li>
-            <li><strong>Auge (24–29 anos):</strong> Estabilização do <em>overall</em>, pequenos ajustes conforme o desempenho.</li>
-            <li><strong>Declínio (30+ anos):</strong> Perda gradual de atributos físicos (velocidade e resistência primeiro), compensada por pequenos ganhos táticos.</li>
-        </ul>
+    <!-- Conteúdo Principal -->
+    <main>
+        <header>
+            <h1>Painel do Treinador</h1>
+            <div class="user-profile">
+                <div class="user-avatar">T</div>
+                <span style="font-size: 14px; font-weight: 600;">Treinador TDY</span>
+            </div>
+        </header>
 
-        <h3>C. Transferências & Mercado</h3>
-        <ul>
-            <li><strong>Valor de Mercado:</strong> Calculado dinamicamente usando Idade, OVR, Potencial e Tempo de Contrato restante.</li>
-            <li><strong>Propostas de Transferência:</strong> Recebidas ao fim de cada janela caso o desempenho individual supere a média da liga.</li>
-            <li><strong>Contratos:</strong> Negociação de salário, duração e cláusulas de rescisão.</li>
-        </ul>
-    </div>
-
-    <!-- Perfil Exemplo -->
-    <div class="section">
-        <h2>5. Exemplo de Exibição de Perfil no Jogo</h2>
-        <div class="profile-card">
-            <div class="profile-header">PERFIL DO JOGADOR</div>
-            <div class="profile-row">
-                <span><strong>Nome:</strong> Lucas "Fenômeno" Silva</span>
-                <span><strong>Idade:</strong> 19 anos</span>
+        <!-- Cards de Estado -->
+        <div class="dashboard-grid">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Orçamento de Transferências</span>
+                    <i data-lucide="wallet" class="card-icon"></i>
+                </div>
+                <div class="card-value">€ 45.000.000</div>
             </div>
-            <div class="profile-row">
-                <span><strong>Posição:</strong> ATA (Atacante)</span>
-                <span><strong>Clube:</strong> Santos FC</span>
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Objetivo da Época</span>
+                    <i data-lucide="target" class="card-icon"></i>
+                </div>
+                <div class="card-value">Top 4 (Champions)</div>
             </div>
-            <div class="profile-row">
-                <span><strong>Valor de Mercado:</strong> € 14.5M</span>
-                <span><strong>OVR / Potencial:</strong> 76 / 88</span>
-            </div>
-            
-            <div class="stat-group">
-                <div><span class="stat-title">[FÍSICO]</span> Aceleração: 82 | Sprint: 84 | Força: 70</div>
-                <div><span class="stat-title">[TÉCNICA]</span> Finalização: 79 | Drible: 81 | Passe: 68</div>
-                <div><span class="stat-title">[MENTAL]</span> Frieza: 75 | Visão: 71 | Posicionamento: 77</div>
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Confiança da Direção</span>
+                    <i data-lucide="trending-up" class="card-icon"></i>
+                </div>
+                <div class="card-value" style="color: #4ADE80;">88%</div>
             </div>
         </div>
-    </div>
-</div>
 
+        <!-- Secção de Ficheiros do Ecossistema -->
+        <h2 class="section-title"><i data-lucide="file-text"></i> Base de Dados Conectada (.CSV)</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ficheiro</th>
+                        <th>Função no Simulador</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>clubs.csv</strong></td>
+                        <td>Orçamentos, reputação e infraestruturas do clube.</td>
+                        <td><span class="badge badge-green">Ativo</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>competitions.csv</strong></td>
+                        <td>Ligas, taças, vagas continentais e grau de dificuldade.</td>
+                        <td><span class="badge badge-green">Ativo</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>players.csv</strong></td>
+                        <td>Atributos de atletas (OVR, POT, Idade, Contrato).</td>
+                        <td><span class="badge badge-green">Ativo</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Secção do Guia de Desenvolvimento de Atletas -->
+        <h2 class="section-title"><i data-lucide="zap"></i> Regras de Evolução do Plantel</h2>
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3 style="margin-bottom: 8px;">Jovens Promessas (≤ 21 anos)</h3>
+                <p style="color: var(--text-muted); font-size: 14px;">Multiplicador de Treino: <strong style="color: #4ADE80;">x1.5</strong></p>
+                <div class="file-box">Crescimento acelerado de OVR rumo ao Potencial (POT).</div>
+            </div>
+            <div class="card">
+                <h3 style="margin-bottom: 8px;">Pico de Rendimento (22–29 anos)</h3>
+                <p style="color: var(--text-muted); font-size: 14px;">Multiplicador de Treino: <strong style="color: var(--text-light);">x1.0</strong></p>
+                <div class="file-box">Estabilização do OVR e foco em especialização tática.</div>
+            </div>
+            <div class="card">
+                <h3 style="margin-bottom: 8px;">Veteranos (≥ 30 anos)</h3>
+                <p style="color: var(--text-muted); font-size: 14px;">Multiplicador de Treino: <strong style="color: var(--accent-red);">x0.5</strong></p>
+                <div class="file-box">Declínio gradual em atributos físicos.</div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Inicialização dos Ícones Lucide -->
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>
