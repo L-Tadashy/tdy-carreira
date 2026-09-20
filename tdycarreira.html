@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TDY_CARREIRA</title>
+    
+    <!-- Configurações para App (PWA / Mobile / Desktop) -->
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="TDY_CARREIRA">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen select-none antialiased">
+
+    <!-- Navbar Adaptável -->
+    <header class="bg-slate-800/90 backdrop-blur border-b border-slate-700 px-4 sm:px-6 py-4 sticky top-0 z-50 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <i class="fa-solid fa-futbol text-emerald-400 text-2xl sm:text-3xl"></i>
+            <h1 class="text-lg sm:text-xl font-bold tracking-wide text-emerald-400">TDY_CARREIRA</h1>
+        </div>
+        <div class="text-xs sm:text-sm text-slate-400">
+            <span class="bg-slate-700/60 px-2.5 py-1 rounded-full text-slate-300 font-mono">v1.0 App</span>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
+
+        <!-- Banner para Instalar App (Aparece em telemóveis e PC) -->
+        <div id="install-banner" class="hidden bg-emerald-500/10 border border-emerald-500/30 p-4 rounded-xl flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-mobile-screen-button text-emerald-400 text-xl"></i>
+                <span class="text-sm font-medium">Instalar a App <strong>TDY_CARREIRA</strong> no teu dispositivo?</span>
+            </div>
+            <button id="install-btn" class="bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-bold text-xs px-4 py-2 rounded-lg transition">
+                Instalar
+            </button>
+        </div>
+
+        <!-- KPIs / Métricas Globais (Grid Responsivo) -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+            <div class="bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-700">
+                <div class="flex items-center justify-between">
+                    <span class="text-slate-400 text-xs sm:text-sm font-medium">Jogadores</span>
+                    <i class="fa-solid fa-users text-indigo-400 text-sm sm:text-base"></i>
+                </div>
+                <p class="text-xl sm:text-2xl font-bold mt-2">~30,000</p>
+                <span class="text-[10px] sm:text-xs text-emerald-400 mt-1 block">Média: 25.8 anos</span>
+            </div>
+
+            <div class="bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-700">
+                <div class="flex items-center justify-between">
+                    <span class="text-slate-400 text-xs sm:text-sm font-medium">Clubes</span>
+                    <i class="fa-solid fa-shield-halved text-emerald-400 text-sm sm:text-base"></i>
+                </div>
+                <p class="text-xl sm:text-2xl font-bold mt-2">~430</p>
+                <span class="text-[10px] sm:text-xs text-slate-400 mt-1 block">Plantel: 26-28 jog.</span>
+            </div>
+
+            <div class="bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-700">
+                <div class="flex items-center justify-between">
+                    <span class="text-slate-400 text-xs sm:text-sm font-medium">Competições</span>
+                    <i class="fa-solid fa-trophy text-amber-400 text-sm sm:text-base"></i>
+                </div>
+                <p class="text-xl sm:text-2xl font-bold mt-2">~40</p>
+                <span class="text-[10px] sm:text-xs text-slate-400 mt-1 block">UEFA e Nacionais</span>
+            </div>
+
+            <div class="bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-700">
+                <div class="flex items-center justify-between">
+                    <span class="text-slate-400 text-xs sm:text-sm font-medium">Valor Total</span>
+                    <i class="fa-solid fa-coins text-yellow-400 text-sm sm:text-base"></i>
+                </div>
+                <p class="text-xl sm:text-2xl font-bold mt-2">€11.8B</p>
+                <span class="text-[10px] sm:text-xs text-emerald-400 mt-1 block">Média: €27.5M</span>
+            </div>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+            <div class="bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-700">
+                <h3 class="text-sm sm:text-base font-semibold mb-4 text-slate-200">
+                    <i class="fa-solid fa-chart-bar text-emerald-400 mr-2"></i>Clubes Mais Valiosos (€ M)
+                </h3>
+                <div class="h-56 sm:h-64">
+                    <canvas id="clubsChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-slate-800 p-4 sm:p-5 rounded-xl border border-slate-700">
+                <h3 class="text-sm sm:text-base font-semibold mb-4 text-slate-200">
+                    <i class="fa-solid fa-chart-pie text-indigo-400 mr-2"></i>Distribuição por Posição
+                </h3>
+                <div class="h-56 sm:h-64 flex justify-center">
+                    <canvas id="positionsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabelas de Dados -->
+        <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+            <!-- Abas (Tabs) -->
+            <div class="flex border-b border-slate-700 bg-slate-800/50 overflow-x-auto">
+                <button onclick="switchTab('players')" id="tab-players" class="tab-btn min-w-[120px] sm:min-w-0 flex-1 px-4 py-3 text-xs sm:text-sm font-medium text-emerald-400 border-b-2 border-emerald-400 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-user"></i> Jogadores
+                </button>
+                <button onclick="switchTab('clubs')" id="tab-clubs" class="tab-btn min-w-[120px] sm:min-w-0 flex-1 px-4 py-3 text-xs sm:text-sm font-medium text-slate-400 hover:text-slate-200 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-shield"></i> Clubes
+                </button>
+                <button onclick="switchTab('competitions')" id="tab-competitions" class="tab-btn min-w-[120px] sm:min-w-0 flex-1 px-4 py-3 text-xs sm:text-sm font-medium text-slate-400 hover:text-slate-200 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-trophy"></i> Competições
+                </button>
+            </div>
+
+            <!-- Conteúdo das Tabelas -->
+            <div class="p-3 sm:p-4">
+                <div id="content-players" class="tab-content overflow-x-auto">
+                    <table class="w-full text-left text-xs sm:text-sm text-slate-300 whitespace-nowrap">
+                        <thead class="bg-slate-700/50 text-slate-200 uppercase text-[10px] sm:text-xs">
+                            <tr>
+                                <th class="p-2.5">Nome</th>
+                                <th class="p-2.5">Posição</th>
+                                <th class="p-2.5">Pé</th>
+                                <th class="p-2.5">Valor de Mercado</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700/50">
+                            <tr class="hover:bg-slate-700/30">
+                                <td class="p-2.5 font-semibold text-white">Kylian Mbappé</td>
+                                <td class="p-2.5"><span class="bg-red-500/10 text-red-400 px-2 py-0.5 rounded text-[10px]">Avançado</span></td>
+                                <td class="p-2.5">Direito</td>
+                                <td class="p-2.5 text-emerald-400 font-bold">€180,000,000</td>
+                            </tr>
+                            <tr class="hover:bg-slate-700/30">
+                                <td class="p-2.5 font-semibold text-white">Erling Haaland</td>
+                                <td class="p-2.5"><span class="bg-red-500/10 text-red-400 px-2 py-0.5 rounded text-[10px]">Avançado</span></td>
+                                <td class="p-2.5">Esquerdo</td>
+                                <td class="p-2.5 text-emerald-400 font-bold">€180,000,000</td>
+                            </tr>
+                            <tr class="hover:bg-slate-700/30">
+                                <td class="p-2.5 font-semibold text-white">Jude Bellingham</td>
+                                <td class="p-2.5"><span class="bg-indigo-500/10 text-indigo-400 px-2 py-0.5 rounded text-[10px]">Médio</span></td>
+                                <td class="p-2.5">Direito</td>
+                                <td class="p-2.5 text-emerald-400 font-bold">€120,000,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="content-clubs" class="tab-content hidden overflow-x-auto">
+                    <table class="w-full text-left text-xs sm:text-sm text-slate-300 whitespace-nowrap">
+                        <thead class="bg-slate-700/50 text-slate-200 uppercase text-[10px] sm:text-xs">
+                            <tr>
+                                <th class="p-2.5">ID</th>
+                                <th class="p-2.5">Clube</th>
+                                <th class="p-2.5">Liga</th>
+                                <th class="p-2.5">Valor Total</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700/50">
+                            <tr class="hover:bg-slate-700/30">
+                                <td class="p-2.5 text-slate-400">281</td>
+                                <td class="p-2.5 font-semibold text-white">Manchester City</td>
+                                <td class="p-2.5">Premier League (GB1)</td>
+                                <td class="p-2.5 text-emerald-400 font-bold">€1,050,000,000</td>
+                            </tr>
+                            <tr class="hover:bg-slate-700/30">
+                                <td class="p-2.5 text-slate-400">583</td>
+                                <td class="p-2.5 font-semibold text-white">Paris Saint-Germain</td>
+                                <td class="p-2.5">Ligue 1 (FR1)</td>
+                                <td class="p-2.5 text-emerald-400 font-bold">€890,000,000</td>
+                            </tr>
+                            <tr class="hover:bg-slate-700/30">
+                                <td class="p-2.5 text-slate-400">418</td>
+                                <td class="p-2.5 font-semibold text-white">Real Madrid</td>
+                                <td class="p-2.5">LaLiga (ES1)</td>
+                                <td class="p-2.5 text-emerald-400 font-bold">€860,000,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="content-competitions" class="tab-content hidden overflow-x-auto">
+                    <table class="w-full text-left text-xs sm:text-sm text-slate-300 whitespace-nowrap">
+                        <thead class="bg-slate-700/50 text-slate-200 uppercase text-[10px] sm:text-xs">
+                            <tr>
+                                <th class="p-2.5">Código</th>
+                                <th class="p-2.5">Competição</th>
+                                <th class="p-2.5">Confederação</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700/50">
+                            <tr class="hover:bg-slate-700/30">
+                                <td class="p-2.5 text-amber-400 font-mono">GB1</td>
+                                <td class="p-2.5 font-semibold text-white">Premier League</td>
+                                <td class="p-2.5">UEFA</td>
+                            </tr>
+                            <tr class="hover:bg-slate-700/30">
+                                <td class="p-2.5 text-amber-400 font-mono">ES1</td>
+                                <td class="p-2.5 font-semibold text-white">LaLiga</td>
+                                <td class="p-2.5">UEFA</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script>
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('text-emerald-400', 'border-b-2', 'border-emerald-400');
+                el.classList.add('text-slate-400');
+            });
+
+            document.getElementById(`content-${tabName}`).classList.remove('hidden');
+            const activeTab = document.getElementById(`tab-${tabName}`);
+            activeTab.classList.add('text-emerald-400', 'border-b-2', 'border-emerald-400');
+            activeTab.classList.remove('text-slate-400');
+        }
+
+        window.onload = function() {
+            const ctxClubs = document.getElementById('clubsChart').getContext('2d');
+            new Chart(ctxClubs, {
+                type: 'bar',
+                data: {
+                    labels: ['Man City', 'PSG', 'Real Madrid', 'Arsenal'],
+                    datasets: [{
+                        label: 'Valor (€ M)',
+                        data: [1050, 890, 860, 800],
+                        backgroundColor: '#10b981',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#334155' } },
+                        x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { display: false } }
+                    }
+                }
+            });
+
+            const ctxPositions = document.getElementById('positionsChart').getContext('2d');
+            new Chart(ctxPositions, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Defesas', 'Médios', 'Avançados', 'Guarda-redes'],
+                    datasets: [{
+                        data: [34, 30, 24, 12],
+                        backgroundColor: ['#3b82f6', '#6366f1', '#ef4444', '#f59e0b'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 10 } } } }
+                }
+            });
+        };
+
+        // Lógica de Instalação no Telemóvel / PC
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('install-banner').classList.remove('hidden');
+        });
+
+        document.getElementById('install-btn')?.addEventListener('click', () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(() => {
+                    document.getElementById('install-banner').classList.add('hidden');
+                });
+            }
+        });
+    </script>
+</body>
+  </html>
